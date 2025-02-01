@@ -13,6 +13,11 @@ const GuessForm = ({ players, onSubmit }) => {
     const filteredSuggestions = players.filter((player) =>
       player.toLowerCase().includes(value.toLowerCase())
     );
+
+    if (filteredSuggestions.length > 5) {
+      filteredSuggestions.length = 5;
+    }
+
     setSuggestions(filteredSuggestions);
   };
 
