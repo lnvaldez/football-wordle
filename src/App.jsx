@@ -1,9 +1,8 @@
+import React from "react";
+import GamePage from "./components/pages/GamePage";
+
 function App() {
-  return (
-    <div>
-      <h1>Football Wordle</h1>
-    </div>
-  );
+  return <GamePage />;
 }
 
 export default App;
