@@ -1,16 +1,16 @@
 import axios from "axios";
 
 // Data
-import braPlayers from "../data/brasileirao-players-2024.json";
-import bundPlayers from "../data/bundesliga-players-2024-25.json";
-import eplPlayers from "../data/epl-players-2024-25.json";
-import eredPlayers from "../data/eredivisie-players-2024-25.json";
-import llPlayers from "../data/la-liga-players-2024-25.json";
-import l1Players from "../data/ligue-1-players-2024-25.json";
-import mlsPlayers from "../data/mls-players-2025.json";
-import plPlayers from "../data/primeira-liga-players-2024-25.json";
-import pdaPlayers from "../data/primera-division-arg-players-2024.json";
-import jplPlayers from "../data/pro-league-players-2024-25.json";
+import braPlayers from "../data/players/brasileirao-players-2024.json";
+import bundPlayers from "../data/players/bundesliga-players-2024-25.json";
+import eplPlayers from "../data/players/epl-players-2024-25.json";
+import eredPlayers from "../data/players/eredivisie-players-2024-25.json";
+import llPlayers from "../data/players/la-liga-players-2024-25.json";
+import l1Players from "../data/players/ligue-1-players-2024-25.json";
+import mlsPlayers from "../data/players/mls-players-2025.json";
+import plPlayers from "../data/players/primeira-liga-players-2024-25.json";
+import pdaPlayers from "../data/players/primera-division-arg-players-2024.json";
+import jplPlayers from "../data/players/pro-league-players-2024-25.json";
 
 // All players list
 export const allPlayers = [
@@ -45,14 +45,14 @@ export const fetchPlayerData = async (playerName) => {
   }
 };
 
-export const fetchRandomPlayer = async () => {
+export const fetchRandomPlayer = async (players) => {
   const maxRetries = 10;
   let retries = 0;
 
   while (retries < maxRetries) {
     try {
       const shuffledPlayers =
-        allPlayers[Math.floor(Math.random() * allPlayers.length)];
+        players[Math.floor(Math.random() * players.length)];
 
       const playerData = await fetchPlayerData(shuffledPlayers);
 
@@ -62,7 +62,7 @@ export const fetchRandomPlayer = async () => {
           club: playerData.strTeam || "Unknown",
           age: playerData.dateborn
             ? new Date().getFullYear() -
-              new Date(player.Data.dateBorn).getFullYear()
+              new Date(playerData.dateBorn).getFullYear()
             : "Unknown",
           nationality: playerData.strNationality || "Unknown",
           number: playerData.strNumber || "Unknown",
