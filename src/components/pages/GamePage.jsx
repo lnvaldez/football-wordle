@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   allPlayers,
   fetchRandomPlayer,
@@ -7,16 +8,24 @@ import {
 import GameTemplate from "../templates/GameTemplate";
 
 const GamePage = () => {
+  const { state } = useLocation();
+  const { selectedPlayers } = state || {};
+
   const [targetPlayer, setTargetPlayer] = useState(null);
   const [guesses, setGuesses] = useState([]);
 
   useEffect(() => {
     const getRandomPlayer = async () => {
-      const player = await fetchRandomPlayer();
-      setTargetPlayer(player);
+      if (!selectedPlayers || selectedPlayers.length === 0) return;
+      try {
+        const player = await fetchRandomPlayer(selectedPlayers);
+        setTargetPlayer(player);
+      } catch (error) {
+        console.error("Failed to fetch random player:", error.message);
+      }
     };
     getRandomPlayer();
-  }, []);
+  }, [selectedPlayers]);
 
   const handleGuessSubmit = async (playerName) => {
     const playerData = await fetchPlayerData(playerName);
