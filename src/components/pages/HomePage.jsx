@@ -12,7 +12,10 @@ const HomePage = () => {
       selectedLeagues.map(async (leagueId) => {
         const league = leaguesData.find((league) => league.id == leagueId);
         if (!league) return [];
-        const playersData = await import(`../../data/${league.playersFile}`);
+        const playersData = await import(
+          /* @vite-ignore */
+          `../../data/${league.playersFile}`
+        );
         return playersData.players || [];
       })
     );
