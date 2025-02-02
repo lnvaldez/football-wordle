@@ -8,9 +8,6 @@ const GuessRow = ({ guess, targetPlayer }) => {
     guessedValue = String(guessedValue).toLowerCase().trim();
     targetValue = String(targetValue).toLowerCase().trim();
 
-    if (field === "age") {
-      return Math.abs(Number(guessedValue) - Number(targetValue)) <= 1;
-    }
     return guessedValue === targetValue;
   };
 
