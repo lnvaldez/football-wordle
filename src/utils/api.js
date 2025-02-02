@@ -60,7 +60,7 @@ export const fetchRandomPlayer = async (players) => {
         return {
           name: playerData.strPlayer || "Unknown",
           club: playerData.strTeam || "Unknown",
-          age: playerData.dateborn
+          age: playerData.dateBorn
             ? new Date().getFullYear() -
               new Date(playerData.dateBorn).getFullYear()
             : "Unknown",
