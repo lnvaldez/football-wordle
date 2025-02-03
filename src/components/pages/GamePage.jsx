@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  allPlayers,
-  fetchRandomPlayer,
-  fetchPlayerData,
-} from "../../utils/api";
+import { fetchRandomPlayer, fetchCompletePlayerData } from "../../utils/api";
 import GameTemplate from "../templates/GameTemplate";
 
 const GamePage = () => {
@@ -28,21 +24,9 @@ const GamePage = () => {
   }, [selectedPlayers]);
 
   const handleGuessSubmit = async (playerName) => {
-    const playerData = await fetchPlayerData(playerName);
-    if (playerData) {
-      const guessedPlayer = {
-        name: playerName,
-        club: playerData.strTeam || "Unknown",
-        age: playerData.dateBorn
-          ? new Date().getFullYear() -
-            new Date(playerData.dateBorn).getFullYear()
-          : "Unknown",
-        nationality: playerData.strNationality || "Unknown",
-        number: playerData.strNumber || "Unknown",
-        foot: playerData.strSide || "Unknown",
-        position: playerData.strPosition || "Unknown",
-        height: playerData.strHeight || "Unknown",
-      };
+    const guessedPlayer = await fetchCompletePlayerData(playerName);
+
+    if (guessedPlayer) {
       setGuesses([...guesses, guessedPlayer]);
     } else {
       alert("Player not found!");
@@ -51,7 +35,7 @@ const GamePage = () => {
 
   return (
     <GameTemplate
-      players={allPlayers}
+      players={selectedPlayers}
       guesses={guesses}
       targetPlayer={targetPlayer}
       onGuessSubmit={handleGuessSubmit}
