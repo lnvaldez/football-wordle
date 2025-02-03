@@ -21,6 +21,13 @@ const GuessForm = ({ players, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!players.includes(inputValue)) {
+      alert("Player not found");
+      setInputValue("");
+      return;
+    }
+
     if (inputValue.trim()) {
       onSubmit(inputValue);
       setInputValue("");
