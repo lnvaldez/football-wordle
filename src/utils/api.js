@@ -53,6 +53,24 @@ export const fetchCompletePlayerData = async (playerName) => {
         ? new Date().getFullYear() - birthDate.getFullYear()
         : "Unknown";
 
+    const parseHeight = (heightStr) => {
+      if (!heightStr) return null;
+
+      const match = heightStr.match(/\d+(\.\d+)?/);
+
+      if (!match) return null;
+
+      let height = parseFloat(match[0]);
+
+      if (height > 3) {
+        height /= 100;
+      }
+
+      return parseFloat(height.toFixed(2));
+    };
+
+    const height = parseHeight(playerData.strHeight);
+
     return new Player({
       thumb: playerData.strThumb,
       name: playerData.strPlayer || "Unknown",
@@ -63,7 +81,7 @@ export const fetchCompletePlayerData = async (playerName) => {
       number: playerData.strNumber,
       foot: playerData.strSide,
       position: playerData.strPosition,
-      height: playerData.strHeight,
+      height,
     });
   } catch (error) {
     console.error("Error fetching complete player data:", error.message);
