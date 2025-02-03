@@ -13,6 +13,11 @@ const GuessRow = ({ guess, targetPlayer }) => {
 
   return (
     <tr>
+      <TableCell
+        value={
+          <img src={guess.thumb} alt={guess.name} width={75} height={75} />
+        }
+      />
       <TableCell value={guess.name} />
       <TableCell
         value={guess.league}
