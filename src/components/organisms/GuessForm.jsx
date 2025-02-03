@@ -10,15 +10,13 @@ const GuessForm = ({ players, onSubmit }) => {
   const handleChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
-    const filteredSuggestions = players.filter((player) =>
-      player.toLowerCase().includes(value.toLowerCase())
-    );
+    const filteredSuggestions = players
+      .filter((player) => player.toLowerCase().includes(value.toLowerCase()))
+      .slice(0, 5);
 
-    if (filteredSuggestions.length > 5) {
-      filteredSuggestions.length = 5;
-    }
+    const uniqueSuggestions = [...new Set(filteredSuggestions)];
 
-    setSuggestions(filteredSuggestions);
+    setSuggestions(uniqueSuggestions);
   };
 
   const handleSubmit = (e) => {
