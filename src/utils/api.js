@@ -1,30 +1,5 @@
 import axios from "axios";
-
-// Data
-import braPlayers from "../data/players/brasileirao-players-2024.json";
-import bundPlayers from "../data/players/bundesliga-players-2024-25.json";
-import eplPlayers from "../data/players/epl-players-2024-25.json";
-import eredPlayers from "../data/players/eredivisie-players-2024-25.json";
-import llPlayers from "../data/players/la-liga-players-2024-25.json";
-import l1Players from "../data/players/ligue-1-players-2024-25.json";
-import mlsPlayers from "../data/players/mls-players-2025.json";
-import plPlayers from "../data/players/primeira-liga-players-2024-25.json";
-import pdaPlayers from "../data/players/primera-division-arg-players-2024.json";
-import jplPlayers from "../data/players/pro-league-players-2024-25.json";
-
-// All players list
-export const allPlayers = [
-  ...braPlayers.players,
-  ...bundPlayers.players,
-  ...eplPlayers.players,
-  ...eredPlayers.players,
-  ...llPlayers.players,
-  ...l1Players.players,
-  ...mlsPlayers.players,
-  ...plPlayers.players,
-  ...pdaPlayers.players,
-  ...jplPlayers.players,
-];
+import { Player } from "../models/Player";
 
 export const fetchPlayerData = async (playerName) => {
   try {
@@ -45,6 +20,57 @@ export const fetchPlayerData = async (playerName) => {
   }
 };
 
+export const fetchTeamData = async (teamName) => {
+  try {
+    const response = await axios.get(
+      `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${teamName}`
+    );
+
+    if (response.data && response.data.teams && response.data.teams[0]) {
+      return response.data.teams[0];
+    }
+
+    console.warn(`No team data found for ${teamName}`);
+    return null;
+  } catch (error) {
+    console.error("Error fetching team data:", error);
+  }
+};
+
+export const fetchCompletePlayerData = async (playerName) => {
+  try {
+    const playerData = await fetchPlayerData(playerName);
+    if (!playerData) {
+      throw new Error(`Failed to fetch player data for ${playerName}`);
+    }
+
+    const teamData = await fetchTeamData(playerData.strTeam);
+    const league = teamData?.strLeague || "Unknown";
+
+    const birthDate = new Date(playerData.dateBorn);
+    const age =
+      birthDate instanceof Date && !isNaN(birthDate)
+        ? new Date().getFullYear() - birthDate.getFullYear()
+        : "Unknown";
+
+    return new Player({
+      thumb: playerData.strThumb,
+      name: playerData.strPlayer || "Unknown",
+      league,
+      club: playerData.strTeam,
+      age,
+      nationality: playerData.strNationality,
+      number: playerData.strNumber,
+      foot: playerData.strSide,
+      position: playerData.strPosition,
+      height: playerData.strHeight,
+    });
+  } catch (error) {
+    console.error("Error fetching complete player data:", error.message);
+    return null;
+  }
+};
+
 export const fetchRandomPlayer = async (players) => {
   const maxRetries = 10;
   let retries = 0;
@@ -54,22 +80,10 @@ export const fetchRandomPlayer = async (players) => {
       const shuffledPlayers =
         players[Math.floor(Math.random() * players.length)];
 
-      const playerData = await fetchPlayerData(shuffledPlayers);
+      const player = await fetchCompletePlayerData(shuffledPlayers);
 
-      if (playerData) {
-        return {
-          name: playerData.strPlayer || "Unknown",
-          club: playerData.strTeam || "Unknown",
-          age: playerData.dateBorn
-            ? new Date().getFullYear() -
-              new Date(playerData.dateBorn).getFullYear()
-            : "Unknown",
-          nationality: playerData.strNationality || "Unknown",
-          number: playerData.strNumber || "Unknown",
-          foot: playerData.strSide || "Unknown",
-          position: playerData.strPosition || "Unknown",
-          height: playerData.strHeight || "Unknown",
-        };
+      if (player) {
+        return player;
       }
     } catch (error) {
       console.warn(`Attempt ${retries + 1} failed:`, error.message);
