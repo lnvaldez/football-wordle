@@ -15,6 +15,14 @@ const GuessRow = ({ guess, targetPlayer }) => {
     <tr>
       <TableCell value={guess.name} />
       <TableCell
+        value={guess.league}
+        backgroundColor={
+          compareValues("league", guess.league, targetPlayer.league)
+            ? "green"
+            : "red"
+        }
+      />
+      <TableCell
         value={guess.club}
         backgroundColor={
           compareValues("club", guess.club, targetPlayer.club) ? "green" : "red"
