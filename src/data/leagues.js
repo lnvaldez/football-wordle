@@ -1,5 +1,6 @@
 import braLogo from "../assets/brasileirao-logo.svg";
 import bundesligaLogo from "../assets/bundesliga-logo.svg";
+import serieALogo from "../assets/serie-a-logo.svg";
 import eplLogo from "../assets/epl-logo.svg";
 import eredivisieLogo from "../assets/eredivisie-logo.svg";
 import laLigaLogo from "../assets/la-liga-logo.svg";
@@ -21,6 +22,12 @@ const leaguesData = [
     name: "La Liga",
     logo: laLigaLogo,
     playersFile: "players/la-liga-players-2024-25.json",
+  },
+  {
+    id: "serie-a",
+    name: "Serie A",
+    logo: serieALogo,
+    playersFile: "players/serie-a-players-2024-25.json",
   },
   {
     id: "bundesliga",
