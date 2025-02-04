@@ -2,14 +2,38 @@ import React from "react";
 import TableCell from "../atoms/TableCell";
 
 const GuessRow = ({ guess, targetPlayer }) => {
-  const compareValues = (field, guessedValue, targetValue) => {
-    if (!guessedValue || !targetValue) return false;
+  const compareAndColor = (field, guessedValue, targetValue) => {
+    if (!guessedValue || !targetValue) return { value: "?", color: "red" };
 
-    guessedValue = String(guessedValue).toLowerCase().trim();
-    targetValue = String(targetValue).toLowerCase().trim();
+    let normalizedGuess = String(guessedValue).toLowerCase().trim();
+    let normalizedTarget = String(targetValue).toLowerCase().trim();
 
-    return guessedValue === targetValue;
+    if (["age", "height"].includes(field)) {
+      const guessedNum = Number(normalizedGuess.replace(/[^0-9.]/g, ""));
+      const targetNum = Number(normalizedTarget.replace(/[^0-9.]/g, ""));
+
+      if (guessedNum > targetNum)
+        return { value: `<${guessedNum}`, color: "yellow" };
+      if (guessedNum < targetNum)
+        return { value: `>${guessedNum}`, color: "yellow" };
+      return { value: `${targetNum}`, color: "green" };
+    }
+
+    return normalizedGuess === normalizedTarget
+      ? { value: guessedValue, color: "green" }
+      : { value: guessedValue, color: "red" };
   };
+
+  const fields = [
+    { key: "league", label: guess.league },
+    { key: "club", label: guess.club },
+    { key: "age", label: guess.age },
+    { key: "nationality", label: guess.nationality },
+    { key: "number", label: guess.number },
+    { key: "foot", label: guess.foot },
+    { key: "position", label: guess.position },
+    { key: "height", label: guess.height },
+  ];
 
   return (
     <tr>
@@ -19,68 +43,10 @@ const GuessRow = ({ guess, targetPlayer }) => {
         }
       />
       <TableCell value={guess.name} />
-      <TableCell
-        value={guess.league}
-        backgroundColor={
-          compareValues("league", guess.league, targetPlayer.league)
-            ? "green"
-            : "red"
-        }
-      />
-      <TableCell
-        value={guess.club}
-        backgroundColor={
-          compareValues("club", guess.club, targetPlayer.club) ? "green" : "red"
-        }
-      />
-      <TableCell
-        value={guess.age}
-        backgroundColor={
-          compareValues("age", guess.age, targetPlayer.age) ? "green" : "red"
-        }
-      />
-      <TableCell
-        value={guess.nationality}
-        backgroundColor={
-          compareValues(
-            "nationality",
-            guess.nationality,
-            targetPlayer.nationality
-          )
-            ? "green"
-            : "red"
-        }
-      />
-      <TableCell
-        value={guess.number}
-        backgroundColor={
-          compareValues("number", guess.number, targetPlayer.number)
-            ? "green"
-            : "red"
-        }
-      />
-      <TableCell
-        value={guess.foot}
-        backgroundColor={
-          compareValues("foot", guess.foot, targetPlayer.foot) ? "green" : "red"
-        }
-      />
-      <TableCell
-        value={guess.position}
-        backgroundColor={
-          compareValues("position", guess.position, targetPlayer.position)
-            ? "green"
-            : "red"
-        }
-      />
-      <TableCell
-        value={guess.height}
-        backgroundColor={
-          compareValues("height", guess.height, targetPlayer.height)
-            ? "green"
-            : "red"
-        }
-      />
+      {fields.map(({ key, label }) => {
+        const { value, color } = compareAndColor(key, label, targetPlayer[key]);
+        return <TableCell key={key} value={value} backgroundColor={color} />;
+      })}
     </tr>
   );
 };
