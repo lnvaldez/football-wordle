@@ -5,6 +5,7 @@ import leaguesData from "../../data/leagues.js";
 
 const HomePage = () => {
   const [selectedLeagues, setSelectedLeagues] = useState([]);
+  const [difficulty, setDifficulty] = useState("easy");
   const navigateTo = useNavigate();
 
   const getSelectedPlayers = async () => {
@@ -25,7 +26,16 @@ const HomePage = () => {
             /* @vite-ignore */
             `../../data/${league.playersFile}`
           );
-          return playersData.players || [];
+          switch (difficulty) {
+            case "easy":
+              return playersData.players.slice(0, 10) || [];
+            case "medium":
+              return playersData.players.slice(0, 50) || [];
+            case "hard":
+              return playersData.players || [];
+            default:
+              return playersData.players.slice(0, 10) || [];
+          }
         } catch (error) {
           console.error(
             `Failed to load players for league: ${league.name}`,
@@ -53,6 +63,7 @@ const HomePage = () => {
 
   const handlePlay = async () => {
     const selectedPlayers = await getSelectedPlayers();
+    console.log(selectedPlayers.length);
     if (selectedPlayers.length === 0) {
       alert("No players found. Please check your data files.");
       return;
@@ -67,6 +78,8 @@ const HomePage = () => {
       onToggleLeague={handleToggleLeague}
       onClear={handleClear}
       onPlay={handlePlay}
+      difficulty={difficulty}
+      setDifficulty={setDifficulty}
     />
   );
 };
