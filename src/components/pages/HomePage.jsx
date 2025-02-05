@@ -8,17 +8,34 @@ const HomePage = () => {
   const navigateTo = useNavigate();
 
   const getSelectedPlayers = async () => {
+    let leaguesToFetch;
+
+    if (selectedLeagues.length === 0) {
+      leaguesToFetch = leaguesData;
+    } else {
+      leaguesToFetch = leaguesData.filter((league) =>
+        selectedLeagues.includes(league.id)
+      );
+    }
+
     const selectedPlayers = await Promise.all(
-      selectedLeagues.map(async (leagueId) => {
-        const league = leaguesData.find((league) => league.id == leagueId);
-        if (!league) return [];
-        const playersData = await import(
-          /* @vite-ignore */
-          `../../data/${league.playersFile}`
-        );
-        return playersData.players || [];
+      leaguesToFetch.map(async (league) => {
+        try {
+          const playersData = await import(
+            /* @vite-ignore */
+            `../../data/${league.playersFile}`
+          );
+          return playersData.players || [];
+        } catch (error) {
+          console.error(
+            `Failed to load players for league: ${league.name}`,
+            error
+          );
+          return [];
+        }
       })
     );
+
     return selectedPlayers.flat();
   };
 
@@ -37,7 +54,7 @@ const HomePage = () => {
   const handlePlay = async () => {
     const selectedPlayers = await getSelectedPlayers();
     if (selectedPlayers.length === 0) {
-      alert("Please select at least one league.");
+      alert("No players found. Please check your data files.");
       return;
     }
     navigateTo("/game", { state: { selectedPlayers } });

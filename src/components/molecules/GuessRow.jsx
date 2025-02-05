@@ -3,7 +3,8 @@ import TableCell from "../atoms/TableCell";
 
 const GuessRow = ({ guess, targetPlayer }) => {
   const compareAndColor = (field, guessedValue, targetValue) => {
-    if (!guessedValue || !targetValue) return { value: "?", color: "red" };
+    if (!guessedValue || !targetValue)
+      return { value: guessedValue, color: "red" };
 
     let normalizedGuess = String(guessedValue).toLowerCase().trim();
     let normalizedTarget = String(targetValue).toLowerCase().trim();

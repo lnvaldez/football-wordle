@@ -527,7 +527,7 @@ const countries = [
   {
     name: "Ireland",
     code: "IE",
-    flag: "https://flagcdn.com/gb.svg",
+    flag: "https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Ireland.svg",
   },
   {
     name: "Isle of Man",

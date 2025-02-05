@@ -106,10 +106,10 @@ export const fetchCompletePlayerData = async (playerName) => {
         name: nationality,
         flag: flagUrl,
       },
-      number: playerData.strNumber,
-      foot: playerData.strSide,
-      position: playerData.strPosition,
-      height,
+      number: playerData.strNumber || "Unknown",
+      foot: playerData.strSide || "Unknown",
+      position: playerData.strPosition || "Unknown",
+      height: height || "Unknown",
     });
   } catch (error) {
     console.error("Error fetching complete player data:", error.message);
