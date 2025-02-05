@@ -13,10 +13,16 @@ const GuessRow = ({ guess, targetPlayer }) => {
       const targetNum = Number(normalizedTarget.replace(/[^0-9.]/g, ""));
 
       if (guessedNum > targetNum)
-        return { value: `<${guessedNum}`, color: "yellow" };
+        return field === "age"
+          ? { value: `<${guessedNum}`, color: "yellow" }
+          : { value: `<${guessedNum}cm`, color: "yellow" };
       if (guessedNum < targetNum)
-        return { value: `>${guessedNum}`, color: "yellow" };
-      return { value: `${targetNum}`, color: "green" };
+        return field === "age"
+          ? { value: `>${guessedNum}`, color: "yellow" }
+          : { value: `>${guessedNum}cm`, color: "yellow" };
+      return field === "age"
+        ? { value: `${guessedNum}`, color: "green" }
+        : { value: `${guessedNum}cm`, color: "green" };
     }
 
     return normalizedGuess === normalizedTarget
@@ -25,10 +31,7 @@ const GuessRow = ({ guess, targetPlayer }) => {
   };
 
   const fields = [
-    { key: "league", label: guess.league },
-    { key: "club", label: guess.club },
     { key: "age", label: guess.age },
-    { key: "nationality", label: guess.nationality },
     { key: "number", label: guess.number },
     { key: "foot", label: guess.foot },
     { key: "position", label: guess.position },
@@ -43,6 +46,51 @@ const GuessRow = ({ guess, targetPlayer }) => {
         }
       />
       <TableCell value={guess.name} />
+      <TableCell
+        value={
+          <img
+            src={guess.league.logo}
+            alt={guess.league.name}
+            width={75}
+            height={75}
+          />
+        }
+        backgroundColor={
+          compareAndColor("league", guess.league.name, targetPlayer.league.name)
+            .color
+        }
+      />
+      <TableCell
+        value={
+          <img
+            src={guess.club.logo}
+            alt={guess.club.name}
+            width={75}
+            height={75}
+          />
+        }
+        backgroundColor={
+          compareAndColor("club", guess.club.name, targetPlayer.club.name).color
+        }
+      />
+      <TableCell
+        value={
+          <img
+            src={guess.nationality.flag}
+            alt={guess.nationality.name}
+            width={75}
+            height={75}
+          />
+        }
+        backgroundColor={
+          compareAndColor(
+            "club",
+            guess.nationality.name,
+            targetPlayer.nationality.name
+          ).color
+        }
+      />
+
       {fields.map(({ key, label }) => {
         const { value, color } = compareAndColor(key, label, targetPlayer[key]);
         return <TableCell key={key} value={value} backgroundColor={color} />;

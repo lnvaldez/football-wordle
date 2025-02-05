@@ -10,8 +10,8 @@ const GuessTable = ({ guesses, targetPlayer }) => {
           <th>Name</th>
           <th>League</th>
           <th>Club</th>
-          <th>Age</th>
           <th>Nationality</th>
+          <th>Age</th>
           <th>Number</th>
           <th>Foot</th>
           <th>Position</th>

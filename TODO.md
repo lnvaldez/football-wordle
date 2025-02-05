@@ -10,11 +10,7 @@
 
 - [ ] Handle player data with height in feet only.
 
-- [ ] Use flags for nationalities.
-
 - [ ] Display nation name on flag hover or click.
-
-- [ ] Show league and club logos.
 
 - [ ] Default unclicked leagues includes all leagues to play.
 
@@ -27,3 +23,6 @@
 ### In Progress
 
 ### Done
+
+- [x] Show league and club logos.
+- [x] Use flags for nationalities.

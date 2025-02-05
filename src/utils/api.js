@@ -1,5 +1,12 @@
 import axios from "axios";
 import { Player } from "../models/Player";
+import leaguesData from "../data/leagues";
+import countries from "../data/countries";
+
+const getFlagUrl = (countryName) => {
+  const country = countries.find((c) => c.name === countryName);
+  return country ? country.flag : null;
+};
 
 export const fetchPlayerData = async (playerName) => {
   try {
@@ -45,7 +52,22 @@ export const fetchCompletePlayerData = async (playerName) => {
     }
 
     const teamData = await fetchTeamData(playerData.strTeam);
-    const league = teamData?.strLeague || "Unknown";
+    const leagueName = teamData?.strLeague || "Unknown";
+
+    const leagueObject = leaguesData.find(
+      (league) => league.name === leagueName
+    );
+    const leagueLogo = leagueObject ? leagueObject.logo : null;
+
+    const league = {
+      name: leagueName,
+      logo: leagueLogo,
+    };
+
+    const club = {
+      name: playerData.strTeam || "Unknown",
+      logo: teamData?.strBadge || null,
+    };
 
     const birthDate = new Date(playerData.dateBorn);
     const age =
@@ -71,13 +93,19 @@ export const fetchCompletePlayerData = async (playerName) => {
 
     const height = parseHeight(playerData.strHeight);
 
+    const nationality = playerData.strNationality || "Unknown";
+    const flagUrl = getFlagUrl(nationality);
+
     return new Player({
       thumb: playerData.strThumb,
       name: playerData.strPlayer || "Unknown",
       league,
-      club: playerData.strTeam,
+      club,
       age,
-      nationality: playerData.strNationality,
+      nationality: {
+        name: nationality,
+        flag: flagUrl,
+      },
       number: playerData.strNumber,
       foot: playerData.strSide,
       position: playerData.strPosition,
