@@ -9,6 +9,7 @@ const GamePage = () => {
 
   const [targetPlayer, setTargetPlayer] = useState(null);
   const [guesses, setGuesses] = useState([]);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     const getRandomPlayer = async () => {
@@ -24,6 +25,10 @@ const GamePage = () => {
   }, [selectedPlayers]);
 
   const handleGuessSubmit = async (playerName) => {
+    if (gameOver || guesses.length >= 10) {
+      alert("Game is over");
+      return;
+    }
     const guessedPlayer = await fetchCompletePlayerData(playerName);
 
     if (guessedPlayer) {
@@ -31,15 +36,23 @@ const GamePage = () => {
     } else {
       alert("Player not found!");
     }
+
+    if (guessedPlayer.name === targetPlayer.name) {
+      alert("You won!");
+      setGameOver(true);
+    }
   };
 
   return (
-    <GameTemplate
-      players={selectedPlayers}
-      guesses={guesses}
-      targetPlayer={targetPlayer}
-      onGuessSubmit={handleGuessSubmit}
-    />
+    <>
+      <p>{gameOver ? "Game Over" : `${10 - guesses.length} guesses left`}</p>
+      <GameTemplate
+        players={selectedPlayers}
+        guesses={guesses}
+        targetPlayer={targetPlayer}
+        onGuessSubmit={handleGuessSubmit}
+      />
+    </>
   );
 };
 
