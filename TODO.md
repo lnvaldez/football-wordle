@@ -10,10 +10,6 @@
 
 - [ ] Display nation name on flag hover or click.
 
-- [ ] Add try limit (10?).
-
-- [ ] Add winning condition.
-
 - [ ] TailwindCSS.
 
 ### In Progress
@@ -24,3 +20,5 @@
 - [x] Use flags for nationalities.
 - [x] Default unclicked leagues includes all leagues to play.
 - [x] Add 3 difficulties to game. Easy includes players (0-10) from all chosen leagues. Normal (0-49). Hard (all).
+- [x] Add try limit (10?).
+- [x] Add winning condition.
