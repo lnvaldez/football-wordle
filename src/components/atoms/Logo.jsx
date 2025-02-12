@@ -14,7 +14,6 @@ const Logo = ({ src, alt, onClick, className }) => {
       }}
     />
   ) : (
-    // Render SVG as a React component
     React.createElement(src, { alt, onClick, style })
   );
 };

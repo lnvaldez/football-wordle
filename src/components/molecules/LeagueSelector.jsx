@@ -11,7 +11,7 @@ const LeagueSelector = ({ leagues, selectedLeagues, onToggleLeague }) => {
           alt={league.name}
           onClick={() => onToggleLeague(league.id)}
           className={`${
-            selectedLeagues.includes(league.id) ? "grayscale-0" : "grayscale"
+            selectedLeagues.includes(league.id) ? "grayscale-0" : "opacity-25"
           }`}
         />
       ))}

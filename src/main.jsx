@@ -8,7 +8,7 @@ import Title from "./components/atoms/Title";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Title text="Football Wordle" />
+      <Title />
       <App />
     </BrowserRouter>
   </StrictMode>

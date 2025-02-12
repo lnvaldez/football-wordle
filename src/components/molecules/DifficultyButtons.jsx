@@ -3,10 +3,16 @@ import Button from "../atoms/Button";
 
 const DifficultyButtons = ({ setDifficulty }) => {
   return (
-    <div className="justify-self-center">
-      <Button onClick={() => setDifficulty("easy")}>Easy</Button>
-      <Button onClick={() => setDifficulty("medium")}>Medium</Button>
-      <Button onClick={() => setDifficulty("hard")}>Hard</Button>
+    <div className="flex gap-8 justify-self-center">
+      <Button color={"easy"} onClick={() => setDifficulty("easy")}>
+        Easy
+      </Button>
+      <Button color={"medium"} onClick={() => setDifficulty("medium")}>
+        Medium
+      </Button>
+      <Button color={"hard"} onClick={() => setDifficulty("hard")}>
+        Hard
+      </Button>
     </div>
   );
 };
